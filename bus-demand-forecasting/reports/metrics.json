@@ -1,0 +1,1421 @@
+{
+  "framing": {
+    "decision": "How many buses / which bus size to schedule for each departure",
+    "prediction_unit": "one scheduled trip (route + departure date/time)",
+    "target": "passengers boarded (<= seat capacity)",
+    "horizon_days": 7,
+    "forecast_issued": "00:00, 7 days before departure date; only trips up to departure_date-8 are visible",
+    "high_flag": 0.9,
+    "watch_flag": 0.75,
+    "low_flag": 0.4
+  },
+  "data": {
+    "quality": {
+      "rows_raw": 101212,
+      "bad_datetime_rows_dropped": 0,
+      "missing_before": {
+        "distance_km": 303,
+        "capacity_seats": 605,
+        "passengers": 808
+      },
+      "duplicates_dropped": 403,
+      "distance_filled": 302,
+      "capacity_filled": 604,
+      "impossible_passengers_set_nan": 313,
+      "rows_without_valid_target": 1117,
+      "outliers_flagged_not_removed": 700,
+      "sold_out_share": 0.07,
+      "rows_clean": 100809,
+      "date_range": [
+        "2022-01-01",
+        "2025-12-31"
+      ],
+      "missing_after": {
+        "distance_km": 0,
+        "capacity_seats": 0,
+        "passengers": 1117
+      }
+    },
+    "modelling_rows": 96827,
+    "split_rows": {
+      "train": 84282,
+      "validation": 6276,
+      "test": 6269
+    },
+    "routes": 12,
+    "features": [
+      "hour_decimal",
+      "is_weekend",
+      "is_peak_hour",
+      "is_holiday",
+      "is_major_festival",
+      "days_to_next_holiday",
+      "days_since_prev_holiday",
+      "next_holiday_major",
+      "doy_sin",
+      "doy_cos",
+      "distance_km",
+      "capacity_seats",
+      "lag1",
+      "lag2",
+      "lag3",
+      "lag4",
+      "lag_mean4",
+      "lag_occ_mean4",
+      "route_mean_28d",
+      "route_occ_28d",
+      "n_lags_available",
+      "route_id",
+      "dow",
+      "season"
+    ]
+  },
+  "validation": {
+    "baseline_route_time": {
+      "MAE": 5.352252084811589,
+      "RMSE": 6.787672620912735,
+      "WAPE": 0.2050616214365448,
+      "Bias": -0.27765940032388237,
+      "n": 6276
+    },
+    "baseline_seasonal_naive": {
+      "MAE": 6.135967707669428,
+      "RMSE": 7.885506082825738,
+      "WAPE": 0.23508823337891513,
+      "Bias": 0.2300562991289569,
+      "n": 6276
+    },
+    "ridge": {
+      "MAE": 5.770990332423465,
+      "RMSE": 7.309060341746102,
+      "WAPE": 0.221104801513294,
+      "Bias": -0.5790217682233588,
+      "n": 6276
+    },
+    "random_forest": {
+      "MAE": 5.36263217827267,
+      "RMSE": 6.803385291517013,
+      "WAPE": 0.20545931548422103,
+      "Bias": -0.6280971673801414,
+      "n": 6276
+    },
+    "hist_gradient_boosting": {
+      "MAE": 4.987090482523301,
+      "RMSE": 6.38215598782587,
+      "WAPE": 0.19107113125315145,
+      "Bias": -1.0495943861733812,
+      "n": 6276
+    }
+  },
+  "test": {
+    "baseline_route_time": {
+      "MAE": 6.249405188887699,
+      "RMSE": 7.842884154232058,
+      "WAPE": 0.2087463828278825,
+      "Bias": -4.091496707764926,
+      "n": 6269
+    },
+    "baseline_seasonal_naive": {
+      "MAE": 5.803171691391502,
+      "RMSE": 7.420306839341306,
+      "WAPE": 0.1938410237283319,
+      "Bias": -1.0851411708406444,
+      "n": 6269
+    },
+    "ridge": {
+      "MAE": 5.701049941563996,
+      "RMSE": 7.105729724657692,
+      "WAPE": 0.19042989175013156,
+      "Bias": -1.5740389533481247,
+      "n": 6269
+    },
+    "random_forest": {
+      "MAE": 5.265080552989505,
+      "RMSE": 6.531875862131925,
+      "WAPE": 0.17586738057699916,
+      "Bias": -1.4035601481829025,
+      "n": 6269
+    },
+    "hist_gradient_boosting": {
+      "MAE": 4.941385457057153,
+      "RMSE": 6.175423863175959,
+      "WAPE": 0.16505512271041825,
+      "Bias": -1.3260212795371462,
+      "n": 6269
+    }
+  },
+  "test_flag_metrics": {
+    "baseline_route_time": {
+      "HIGH (pred occ>=90%)": {
+        "precision": 0.84251968503937,
+        "recall": 0.08075471698113207,
+        "f1": 0.14738292011019283,
+        "tp": 107,
+        "fp": 20,
+        "fn": 1218,
+        "actual_positive": 1325,
+        "flagged": 127
+      },
+      "WATCH+HIGH (pred occ>=75%)": {
+        "precision": 0.6114537444933921,
+        "recall": 0.5237735849056604,
+        "f1": 0.5642276422764227,
+        "tp": 694,
+        "fp": 441,
+        "fn": 631,
+        "actual_positive": 1325,
+        "flagged": 1135
+      }
+    },
+    "baseline_seasonal_naive": {
+      "HIGH (pred occ>=90%)": {
+        "precision": 0.6233974358974359,
+        "recall": 0.29358490566037737,
+        "f1": 0.3991790661877886,
+        "tp": 389,
+        "fp": 235,
+        "fn": 936,
+        "actual_positive": 1325,
+        "flagged": 624
+      },
+      "WATCH+HIGH (pred occ>=75%)": {
+        "precision": 0.46,
+        "recall": 0.7290566037735849,
+        "f1": 0.5640875912408759,
+        "tp": 966,
+        "fp": 1134,
+        "fn": 359,
+        "actual_positive": 1325,
+        "flagged": 2100
+      }
+    },
+    "ridge": {
+      "HIGH (pred occ>=90%)": {
+        "precision": 0.7416974169741697,
+        "recall": 0.15169811320754717,
+        "f1": 0.25187969924812026,
+        "tp": 201,
+        "fp": 70,
+        "fn": 1124,
+        "actual_positive": 1325,
+        "flagged": 271
+      },
+      "WATCH+HIGH (pred occ>=75%)": {
+        "precision": 0.5175699821322216,
+        "recall": 0.6558490566037736,
+        "f1": 0.5785619174434087,
+        "tp": 869,
+        "fp": 810,
+        "fn": 456,
+        "actual_positive": 1325,
+        "flagged": 1679
+      }
+    },
+    "random_forest": {
+      "HIGH (pred occ>=90%)": {
+        "precision": 0.7874396135265701,
+        "recall": 0.1230188679245283,
+        "f1": 0.21279373368146215,
+        "tp": 163,
+        "fp": 44,
+        "fn": 1162,
+        "actual_positive": 1325,
+        "flagged": 207
+      },
+      "WATCH+HIGH (pred occ>=75%)": {
+        "precision": 0.5250131648235914,
+        "recall": 0.7524528301886793,
+        "f1": 0.6184863523573201,
+        "tp": 997,
+        "fp": 902,
+        "fn": 328,
+        "actual_positive": 1325,
+        "flagged": 1899
+      }
+    },
+    "hist_gradient_boosting": {
+      "HIGH (pred occ>=90%)": {
+        "precision": 0.8073170731707318,
+        "recall": 0.249811320754717,
+        "f1": 0.38155619596541784,
+        "tp": 331,
+        "fp": 79,
+        "fn": 994,
+        "actual_positive": 1325,
+        "flagged": 410
+      },
+      "WATCH+HIGH (pred occ>=75%)": {
+        "precision": 0.5480972515856237,
+        "recall": 0.7826415094339623,
+        "f1": 0.6447000310848617,
+        "tp": 1037,
+        "fp": 855,
+        "fn": 288,
+        "actual_positive": 1325,
+        "flagged": 1892
+      }
+    }
+  },
+  "best_model": "hist_gradient_boosting",
+  "best_params": {
+    "ridge": {
+      "alpha": 0.1
+    },
+    "random_forest": {
+      "min_samples_leaf": 5,
+      "max_features": 0.5
+    },
+    "hist_gradient_boosting": {
+      "loss": "poisson",
+      "learning_rate": 0.1,
+      "max_leaf_nodes": 31
+    }
+  },
+  "tuning_log": [
+    {
+      "model": "ridge",
+      "params": {
+        "alpha": 0.1
+      },
+      "val_MAE": 5.771
+    },
+    {
+      "model": "ridge",
+      "params": {
+        "alpha": 1.0
+      },
+      "val_MAE": 5.771
+    },
+    {
+      "model": "ridge",
+      "params": {
+        "alpha": 10.0
+      },
+      "val_MAE": 5.7712
+    },
+    {
+      "model": "ridge",
+      "params": {
+        "alpha": 100.0
+      },
+      "val_MAE": 5.7729
+    },
+    {
+      "model": "random_forest",
+      "params": {
+        "min_samples_leaf": 5,
+        "max_features": 0.5
+      },
+      "val_MAE": 5.3626
+    },
+    {
+      "model": "random_forest",
+      "params": {
+        "min_samples_leaf": 20,
+        "max_features": 0.5
+      },
+      "val_MAE": 5.4721
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "squared_error",
+        "learning_rate": 0.05,
+        "max_leaf_nodes": 15
+      },
+      "val_MAE": 5.1371
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "squared_error",
+        "learning_rate": 0.05,
+        "max_leaf_nodes": 31
+      },
+      "val_MAE": 5.064
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "squared_error",
+        "learning_rate": 0.1,
+        "max_leaf_nodes": 15
+      },
+      "val_MAE": 5.0419
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "squared_error",
+        "learning_rate": 0.1,
+        "max_leaf_nodes": 31
+      },
+      "val_MAE": 5.0179
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "poisson",
+        "learning_rate": 0.05,
+        "max_leaf_nodes": 15
+      },
+      "val_MAE": 5.1182
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "poisson",
+        "learning_rate": 0.05,
+        "max_leaf_nodes": 31
+      },
+      "val_MAE": 5.0429
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "poisson",
+        "learning_rate": 0.1,
+        "max_leaf_nodes": 15
+      },
+      "val_MAE": 5.0546
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "params": {
+        "loss": "poisson",
+        "learning_rate": 0.1,
+        "max_leaf_nodes": 31
+      },
+      "val_MAE": 4.9871
+    }
+  ],
+  "improvement_vs_baseline": {
+    "wape_baseline": 0.2087463828278825,
+    "wape_best": 0.16505512271041825,
+    "relative_wape_reduction_pct": 20.9
+  },
+  "by_route": {
+    "baseline_route_time": {
+      "R01": {
+        "n": 549,
+        "MAE": 6.6948,
+        "RMSE": 8.3162,
+        "WAPE": 0.2021,
+        "Bias": -4.9423
+      },
+      "R02": {
+        "n": 637,
+        "MAE": 5.2566,
+        "RMSE": 6.4112,
+        "WAPE": 0.1778,
+        "Bias": -2.3826
+      },
+      "R03": {
+        "n": 543,
+        "MAE": 6.6872,
+        "RMSE": 8.224,
+        "WAPE": 0.2082,
+        "Bias": -5.0508
+      },
+      "R04": {
+        "n": 455,
+        "MAE": 7.2845,
+        "RMSE": 9.0388,
+        "WAPE": 0.2161,
+        "Bias": -5.439
+      },
+      "R05": {
+        "n": 546,
+        "MAE": 4.9415,
+        "RMSE": 6.0296,
+        "WAPE": 0.189,
+        "Bias": -1.8677
+      },
+      "R06": {
+        "n": 541,
+        "MAE": 6.8322,
+        "RMSE": 8.3816,
+        "WAPE": 0.1938,
+        "Bias": -5.2614
+      },
+      "R07": {
+        "n": 548,
+        "MAE": 5.2273,
+        "RMSE": 6.408,
+        "WAPE": 0.1979,
+        "Bias": -2.4737
+      },
+      "R08": {
+        "n": 451,
+        "MAE": 6.7365,
+        "RMSE": 8.513,
+        "WAPE": 0.2464,
+        "Bias": -4.9909
+      },
+      "R09": {
+        "n": 363,
+        "MAE": 8.2188,
+        "RMSE": 10.0546,
+        "WAPE": 0.256,
+        "Bias": -6.3592
+      },
+      "R10": {
+        "n": 548,
+        "MAE": 6.3363,
+        "RMSE": 7.7493,
+        "WAPE": 0.1875,
+        "Bias": -4.6781
+      },
+      "R11": {
+        "n": 635,
+        "MAE": 5.0131,
+        "RMSE": 6.3213,
+        "WAPE": 0.2161,
+        "Bias": -1.9895
+      },
+      "R12": {
+        "n": 453,
+        "MAE": 7.2228,
+        "RMSE": 9.3425,
+        "WAPE": 0.2551,
+        "Bias": -5.7246
+      }
+    },
+    "baseline_seasonal_naive": {
+      "R01": {
+        "n": 549,
+        "MAE": 6.0551,
+        "RMSE": 7.5752,
+        "WAPE": 0.1828,
+        "Bias": -1.3256
+      },
+      "R02": {
+        "n": 637,
+        "MAE": 5.0578,
+        "RMSE": 6.4929,
+        "WAPE": 0.171,
+        "Bias": 0.3064
+      },
+      "R03": {
+        "n": 543,
+        "MAE": 6.0324,
+        "RMSE": 7.8161,
+        "WAPE": 0.1878,
+        "Bias": -1.8077
+      },
+      "R04": {
+        "n": 455,
+        "MAE": 6.3852,
+        "RMSE": 8.2102,
+        "WAPE": 0.1894,
+        "Bias": -1.4364
+      },
+      "R05": {
+        "n": 546,
+        "MAE": 5.1229,
+        "RMSE": 6.4241,
+        "WAPE": 0.196,
+        "Bias": 0.4336
+      },
+      "R06": {
+        "n": 541,
+        "MAE": 5.7825,
+        "RMSE": 7.4721,
+        "WAPE": 0.164,
+        "Bias": -1.4023
+      },
+      "R07": {
+        "n": 548,
+        "MAE": 5.3945,
+        "RMSE": 6.6619,
+        "WAPE": 0.2042,
+        "Bias": 0.5231
+      },
+      "R08": {
+        "n": 451,
+        "MAE": 6.0329,
+        "RMSE": 7.7656,
+        "WAPE": 0.2207,
+        "Bias": -2.7302
+      },
+      "R09": {
+        "n": 363,
+        "MAE": 7.3554,
+        "RMSE": 9.2032,
+        "WAPE": 0.2291,
+        "Bias": -3.3829
+      },
+      "R10": {
+        "n": 548,
+        "MAE": 5.6183,
+        "RMSE": 7.0193,
+        "WAPE": 0.1662,
+        "Bias": -1.2056
+      },
+      "R11": {
+        "n": 635,
+        "MAE": 5.2853,
+        "RMSE": 6.7576,
+        "WAPE": 0.2279,
+        "Bias": 0.258
+      },
+      "R12": {
+        "n": 453,
+        "MAE": 6.5028,
+        "RMSE": 8.4017,
+        "WAPE": 0.2297,
+        "Bias": -3.1867
+      }
+    },
+    "ridge": {
+      "R01": {
+        "n": 549,
+        "MAE": 5.8328,
+        "RMSE": 7.171,
+        "WAPE": 0.1761,
+        "Bias": -2.047
+      },
+      "R02": {
+        "n": 637,
+        "MAE": 5.0552,
+        "RMSE": 6.2681,
+        "WAPE": 0.171,
+        "Bias": -0.1634
+      },
+      "R03": {
+        "n": 543,
+        "MAE": 5.6708,
+        "RMSE": 7.0996,
+        "WAPE": 0.1765,
+        "Bias": -2.3392
+      },
+      "R04": {
+        "n": 455,
+        "MAE": 6.2645,
+        "RMSE": 7.7731,
+        "WAPE": 0.1859,
+        "Bias": -2.1118
+      },
+      "R05": {
+        "n": 546,
+        "MAE": 5.0276,
+        "RMSE": 6.1607,
+        "WAPE": 0.1923,
+        "Bias": 0.1324
+      },
+      "R06": {
+        "n": 541,
+        "MAE": 5.629,
+        "RMSE": 7.0659,
+        "WAPE": 0.1596,
+        "Bias": -2.1879
+      },
+      "R07": {
+        "n": 548,
+        "MAE": 5.2685,
+        "RMSE": 6.436,
+        "WAPE": 0.1994,
+        "Bias": -0.0583
+      },
+      "R08": {
+        "n": 451,
+        "MAE": 6.2337,
+        "RMSE": 7.7313,
+        "WAPE": 0.2281,
+        "Bias": -2.9164
+      },
+      "R09": {
+        "n": 363,
+        "MAE": 7.4198,
+        "RMSE": 8.9802,
+        "WAPE": 0.2311,
+        "Bias": -3.7436
+      },
+      "R10": {
+        "n": 548,
+        "MAE": 5.4525,
+        "RMSE": 6.6829,
+        "WAPE": 0.1613,
+        "Bias": -1.9168
+      },
+      "R11": {
+        "n": 635,
+        "MAE": 5.0262,
+        "RMSE": 6.2811,
+        "WAPE": 0.2167,
+        "Bias": -0.0084
+      },
+      "R12": {
+        "n": 453,
+        "MAE": 6.6801,
+        "RMSE": 8.4336,
+        "WAPE": 0.2359,
+        "Bias": -3.3894
+      }
+    },
+    "random_forest": {
+      "R01": {
+        "n": 549,
+        "MAE": 5.3803,
+        "RMSE": 6.6503,
+        "WAPE": 0.1625,
+        "Bias": -1.8211
+      },
+      "R02": {
+        "n": 637,
+        "MAE": 4.7981,
+        "RMSE": 5.8975,
+        "WAPE": 0.1623,
+        "Bias": -0.9437
+      },
+      "R03": {
+        "n": 543,
+        "MAE": 5.1186,
+        "RMSE": 6.4538,
+        "WAPE": 0.1593,
+        "Bias": -1.5981
+      },
+      "R04": {
+        "n": 455,
+        "MAE": 5.9498,
+        "RMSE": 7.2156,
+        "WAPE": 0.1765,
+        "Bias": -2.1145
+      },
+      "R05": {
+        "n": 546,
+        "MAE": 4.6634,
+        "RMSE": 5.659,
+        "WAPE": 0.1784,
+        "Bias": -0.268
+      },
+      "R06": {
+        "n": 541,
+        "MAE": 5.5303,
+        "RMSE": 6.8237,
+        "WAPE": 0.1568,
+        "Bias": -2.3921
+      },
+      "R07": {
+        "n": 548,
+        "MAE": 4.7101,
+        "RMSE": 5.7646,
+        "WAPE": 0.1783,
+        "Bias": -0.1651
+      },
+      "R08": {
+        "n": 451,
+        "MAE": 5.6408,
+        "RMSE": 6.9776,
+        "WAPE": 0.2064,
+        "Bias": -1.8124
+      },
+      "R09": {
+        "n": 363,
+        "MAE": 6.6442,
+        "RMSE": 8.0855,
+        "WAPE": 0.2069,
+        "Bias": -2.3018
+      },
+      "R10": {
+        "n": 548,
+        "MAE": 5.1543,
+        "RMSE": 6.3329,
+        "WAPE": 0.1525,
+        "Bias": -1.7598
+      },
+      "R11": {
+        "n": 635,
+        "MAE": 4.5329,
+        "RMSE": 5.6629,
+        "WAPE": 0.1954,
+        "Bias": -0.1886
+      },
+      "R12": {
+        "n": 453,
+        "MAE": 6.0307,
+        "RMSE": 7.5484,
+        "WAPE": 0.213,
+        "Bias": -2.4284
+      }
+    },
+    "hist_gradient_boosting": {
+      "R01": {
+        "n": 549,
+        "MAE": 4.9685,
+        "RMSE": 6.2172,
+        "WAPE": 0.15,
+        "Bias": -1.4879
+      },
+      "R02": {
+        "n": 637,
+        "MAE": 4.4264,
+        "RMSE": 5.5924,
+        "WAPE": 0.1497,
+        "Bias": -0.3586
+      },
+      "R03": {
+        "n": 543,
+        "MAE": 4.9818,
+        "RMSE": 6.2261,
+        "WAPE": 0.1551,
+        "Bias": -1.8191
+      },
+      "R04": {
+        "n": 455,
+        "MAE": 5.7397,
+        "RMSE": 6.9886,
+        "WAPE": 0.1703,
+        "Bias": -2.505
+      },
+      "R05": {
+        "n": 546,
+        "MAE": 4.5285,
+        "RMSE": 5.5237,
+        "WAPE": 0.1732,
+        "Bias": -0.9062
+      },
+      "R06": {
+        "n": 541,
+        "MAE": 5.0225,
+        "RMSE": 6.2579,
+        "WAPE": 0.1424,
+        "Bias": -1.8472
+      },
+      "R07": {
+        "n": 548,
+        "MAE": 4.6916,
+        "RMSE": 5.8259,
+        "WAPE": 0.1776,
+        "Bias": -1.2288
+      },
+      "R08": {
+        "n": 451,
+        "MAE": 5.1587,
+        "RMSE": 6.3923,
+        "WAPE": 0.1887,
+        "Bias": -1.061
+      },
+      "R09": {
+        "n": 363,
+        "MAE": 5.8064,
+        "RMSE": 7.2501,
+        "WAPE": 0.1808,
+        "Bias": -1.8667
+      },
+      "R10": {
+        "n": 548,
+        "MAE": 4.7926,
+        "RMSE": 5.9902,
+        "WAPE": 0.1418,
+        "Bias": -1.4222
+      },
+      "R11": {
+        "n": 635,
+        "MAE": 4.4841,
+        "RMSE": 5.5464,
+        "WAPE": 0.1933,
+        "Bias": -0.4614
+      },
+      "R12": {
+        "n": 453,
+        "MAE": 5.397,
+        "RMSE": 6.8903,
+        "WAPE": 0.1906,
+        "Bias": -1.6424
+      }
+    }
+  },
+  "by_peak": {
+    "baseline_route_time": {
+      "off-peak": {
+        "n": 2536,
+        "MAE": 6.063,
+        "RMSE": 7.747,
+        "WAPE": 0.23,
+        "Bias": -4.2094
+      },
+      "peak": {
+        "n": 3733,
+        "MAE": 6.376,
+        "RMSE": 7.9074,
+        "WAPE": 0.197,
+        "Bias": -4.0114
+      }
+    },
+    "baseline_seasonal_naive": {
+      "off-peak": {
+        "n": 2536,
+        "MAE": 5.6522,
+        "RMSE": 7.2271,
+        "WAPE": 0.2144,
+        "Bias": -1.3444
+      },
+      "peak": {
+        "n": 3733,
+        "MAE": 5.9058,
+        "RMSE": 7.5487,
+        "WAPE": 0.1825,
+        "Bias": -0.909
+      }
+    },
+    "ridge": {
+      "off-peak": {
+        "n": 2536,
+        "MAE": 5.5828,
+        "RMSE": 7.0483,
+        "WAPE": 0.2118,
+        "Bias": -1.7928
+      },
+      "peak": {
+        "n": 3733,
+        "MAE": 5.7814,
+        "RMSE": 7.1445,
+        "WAPE": 0.1786,
+        "Bias": -1.4254
+      }
+    },
+    "random_forest": {
+      "off-peak": {
+        "n": 2536,
+        "MAE": 5.038,
+        "RMSE": 6.3815,
+        "WAPE": 0.1911,
+        "Bias": -1.3887
+      },
+      "peak": {
+        "n": 3733,
+        "MAE": 5.4194,
+        "RMSE": 6.6321,
+        "WAPE": 0.1674,
+        "Bias": -1.4137
+      }
+    },
+    "hist_gradient_boosting": {
+      "off-peak": {
+        "n": 2536,
+        "MAE": 4.7696,
+        "RMSE": 6.0349,
+        "WAPE": 0.1809,
+        "Bias": -1.4147
+      },
+      "peak": {
+        "n": 3733,
+        "MAE": 5.0581,
+        "RMSE": 6.2691,
+        "WAPE": 0.1563,
+        "Bias": -1.2658
+      }
+    }
+  },
+  "by_day_type": {
+    "baseline_route_time": {
+      "holiday": {
+        "n": 272,
+        "MAE": 7.0983,
+        "RMSE": 8.7289,
+        "WAPE": 0.2874,
+        "Bias": -0.1519
+      },
+      "weekday": {
+        "n": 4222,
+        "MAE": 6.2667,
+        "RMSE": 7.9235,
+        "WAPE": 0.2095,
+        "Bias": -4.3105
+      },
+      "weekend": {
+        "n": 1775,
+        "MAE": 6.0782,
+        "RMSE": 7.4992,
+        "WAPE": 0.1973,
+        "Bias": -4.1743
+      }
+    },
+    "baseline_seasonal_naive": {
+      "holiday": {
+        "n": 272,
+        "MAE": 7.8585,
+        "RMSE": 9.8278,
+        "WAPE": 0.3182,
+        "Bias": 2.3388
+      },
+      "weekday": {
+        "n": 4222,
+        "MAE": 5.7505,
+        "RMSE": 7.3715,
+        "WAPE": 0.1923,
+        "Bias": -1.3401
+      },
+      "weekend": {
+        "n": 1775,
+        "MAE": 5.6136,
+        "RMSE": 7.1003,
+        "WAPE": 0.1822,
+        "Bias": -1.0033
+      }
+    },
+    "ridge": {
+      "holiday": {
+        "n": 272,
+        "MAE": 6.9373,
+        "RMSE": 8.6353,
+        "WAPE": 0.2809,
+        "Bias": -1.6986
+      },
+      "weekday": {
+        "n": 4222,
+        "MAE": 5.5671,
+        "RMSE": 6.9731,
+        "WAPE": 0.1861,
+        "Bias": -1.6436
+      },
+      "weekend": {
+        "n": 1775,
+        "MAE": 5.8301,
+        "RMSE": 7.1585,
+        "WAPE": 0.1892,
+        "Bias": -1.3895
+      }
+    },
+    "random_forest": {
+      "holiday": {
+        "n": 272,
+        "MAE": 5.4077,
+        "RMSE": 6.9587,
+        "WAPE": 0.219,
+        "Bias": -1.0478
+      },
+      "weekday": {
+        "n": 4222,
+        "MAE": 5.2526,
+        "RMSE": 6.5168,
+        "WAPE": 0.1756,
+        "Bias": -1.3978
+      },
+      "weekend": {
+        "n": 1775,
+        "MAE": 5.273,
+        "RMSE": 6.5,
+        "WAPE": 0.1712,
+        "Bias": -1.4719
+      }
+    },
+    "hist_gradient_boosting": {
+      "holiday": {
+        "n": 272,
+        "MAE": 4.9147,
+        "RMSE": 6.2653,
+        "WAPE": 0.199,
+        "Bias": -1.8352
+      },
+      "weekday": {
+        "n": 4222,
+        "MAE": 4.9852,
+        "RMSE": 6.2215,
+        "WAPE": 0.1667,
+        "Bias": -1.2731
+      },
+      "weekend": {
+        "n": 1775,
+        "MAE": 4.8413,
+        "RMSE": 6.0503,
+        "WAPE": 0.1571,
+        "Bias": -1.3738
+      }
+    }
+  },
+  "by_disruption": {
+    "baseline_route_time": {
+      "disruption": {
+        "n": 6,
+        "MAE": 16.0824,
+        "RMSE": 17.0505,
+        "WAPE": 1.3985,
+        "Bias": 16.0824
+      },
+      "normal": {
+        "n": 6263,
+        "MAE": 6.24,
+        "RMSE": 7.8289,
+        "WAPE": 0.2083,
+        "Bias": -4.1108
+      }
+    },
+    "baseline_seasonal_naive": {
+      "disruption": {
+        "n": 6,
+        "MAE": 16.5833,
+        "RMSE": 17.7588,
+        "WAPE": 1.442,
+        "Bias": 16.5833
+      },
+      "normal": {
+        "n": 6263,
+        "MAE": 5.7928,
+        "RMSE": 7.4035,
+        "WAPE": 0.1934,
+        "Bias": -1.1021
+      }
+    },
+    "ridge": {
+      "disruption": {
+        "n": 6,
+        "MAE": 14.2708,
+        "RMSE": 15.3316,
+        "WAPE": 1.2409,
+        "Bias": 14.2708
+      },
+      "normal": {
+        "n": 6263,
+        "MAE": 5.6928,
+        "RMSE": 7.0933,
+        "WAPE": 0.19,
+        "Bias": -1.5892
+      }
+    },
+    "random_forest": {
+      "disruption": {
+        "n": 6,
+        "MAE": 17.1522,
+        "RMSE": 18.4115,
+        "WAPE": 1.4915,
+        "Bias": 17.1522
+      },
+      "normal": {
+        "n": 6263,
+        "MAE": 5.2537,
+        "RMSE": 6.5101,
+        "WAPE": 0.1754,
+        "Bias": -1.4213
+      }
+    },
+    "hist_gradient_boosting": {
+      "disruption": {
+        "n": 6,
+        "MAE": 16.5106,
+        "RMSE": 17.6743,
+        "WAPE": 1.4357,
+        "Bias": 16.5106
+      },
+      "normal": {
+        "n": 6263,
+        "MAE": 4.9303,
+        "RMSE": 6.1541,
+        "WAPE": 0.1646,
+        "Bias": -1.3431
+      }
+    }
+  },
+  "interval": {
+    "level_main": 0.8,
+    "widths": {
+      "0.8": {
+        "0": 7.261504981207908,
+        "1": 8.432748931433027
+      },
+      "0.9": {
+        "0": 9.485419478933162,
+        "1": 11.019948863918849
+      }
+    },
+    "test_coverage_80": 0.7991705216142926,
+    "test_coverage_90": 0.9114691338331472,
+    "avg_width_80": 15.310202049888535
+  },
+  "importance": [
+    {
+      "feature": "lag_mean4",
+      "mae_increase": 1.9056,
+      "std": 0.0069,
+      "meaning": "average same-slot demand (last 4 same weekdays)"
+    },
+    {
+      "feature": "distance_km",
+      "mae_increase": 1.1411,
+      "std": 0.0322,
+      "meaning": "route distance"
+    },
+    {
+      "feature": "dow",
+      "mae_increase": 0.7398,
+      "std": 0.0076,
+      "meaning": "day of week"
+    },
+    {
+      "feature": "is_peak_hour",
+      "mae_increase": 0.6586,
+      "std": 0.0271,
+      "meaning": "peak-hour departure"
+    },
+    {
+      "feature": "days_to_next_holiday",
+      "mae_increase": 0.4526,
+      "std": 0.0215,
+      "meaning": "days until next holiday"
+    },
+    {
+      "feature": "hour_decimal",
+      "mae_increase": 0.4482,
+      "std": 0.0075,
+      "meaning": "departure time of day"
+    },
+    {
+      "feature": "is_weekend",
+      "mae_increase": 0.2549,
+      "std": 0.0036,
+      "meaning": "weekend"
+    },
+    {
+      "feature": "route_occ_28d",
+      "mae_increase": 0.1983,
+      "std": 0.0096,
+      "meaning": "route's average occupancy, last 28 days"
+    },
+    {
+      "feature": "route_id",
+      "mae_increase": 0.167,
+      "std": 0.0071,
+      "meaning": "route"
+    },
+    {
+      "feature": "is_holiday",
+      "mae_increase": 0.1598,
+      "std": 0.0098,
+      "meaning": "public holiday"
+    },
+    {
+      "feature": "route_mean_28d",
+      "mae_increase": 0.0994,
+      "std": 0.0057,
+      "meaning": "route's average demand, last 28 days"
+    },
+    {
+      "feature": "doy_cos",
+      "mae_increase": 0.0652,
+      "std": 0.0032,
+      "meaning": "time of year (cos)"
+    }
+  ],
+  "examples": [
+    {
+      "tag": "typical_prediction",
+      "trip_id": "R07-20251125-1700",
+      "route_id": "R07",
+      "departure": "2025-11-25 17:00:00",
+      "capacity": 40,
+      "actual": 33.0,
+      "predicted": 28.8,
+      "baseline_prediction": 27.5,
+      "disruption_known_to_generator": false,
+      "drivers": [
+        {
+          "feature": "hour_decimal",
+          "meaning": "departure time of day",
+          "value": 17.0,
+          "typical_value": 12.5,
+          "impact_passengers": 3.05
+        },
+        {
+          "feature": "season",
+          "meaning": "season",
+          "value": "post_monsoon",
+          "typical_value": "summer",
+          "impact_passengers": 1.85
+        },
+        {
+          "feature": "lag_mean4",
+          "meaning": "average same-slot demand (last 4 same weekdays)",
+          "value": 30.25,
+          "typical_value": 25.75,
+          "impact_passengers": 1.53
+        },
+        {
+          "feature": "lag_occ_mean4",
+          "meaning": "average same-slot occupancy (last 4 same weekdays)",
+          "value": 0.74,
+          "typical_value": 0.576,
+          "impact_passengers": -1.49
+        },
+        {
+          "feature": "doy_sin",
+          "meaning": "time of year (sin)",
+          "value": -0.584,
+          "typical_value": 0.171,
+          "impact_passengers": -0.85
+        },
+        {
+          "feature": "distance_km",
+          "meaning": "route distance",
+          "value": 65.0,
+          "typical_value": 220.0,
+          "impact_passengers": 0.75
+        }
+      ]
+    },
+    {
+      "tag": "largest_error_without_disruption",
+      "trip_id": "R08-20251225-1200",
+      "route_id": "R08",
+      "departure": "2025-12-25 12:00:00",
+      "capacity": 45,
+      "actual": 45.0,
+      "predicted": 20.9,
+      "baseline_prediction": 15.1,
+      "disruption_known_to_generator": false,
+      "drivers": [
+        {
+          "feature": "doy_sin",
+          "meaning": "time of year (sin)",
+          "value": -0.107,
+          "typical_value": 0.171,
+          "impact_passengers": 7.39
+        },
+        {
+          "feature": "lag_mean4",
+          "meaning": "average same-slot demand (last 4 same weekdays)",
+          "value": 17.0,
+          "typical_value": 25.75,
+          "impact_passengers": -5.48
+        },
+        {
+          "feature": "is_holiday",
+          "meaning": "public holiday",
+          "value": 1,
+          "typical_value": 0.0,
+          "impact_passengers": 2.14
+        },
+        {
+          "feature": "days_to_next_holiday",
+          "meaning": "days until next holiday",
+          "value": 7,
+          "typical_value": 10.0,
+          "impact_passengers": 1.46
+        },
+        {
+          "feature": "is_peak_hour",
+          "meaning": "peak-hour departure",
+          "value": 0,
+          "typical_value": 1.0,
+          "impact_passengers": -1.1
+        },
+        {
+          "feature": "lag4",
+          "meaning": "same-slot demand 5 weeks ago",
+          "value": 13.0,
+          "typical_value": 25.0,
+          "impact_passengers": 0.63
+        }
+      ]
+    },
+    {
+      "tag": "largest_error_during_disruption",
+      "trip_id": "R02-20251119-0730",
+      "route_id": "R02",
+      "departure": "2025-11-19 07:30:00",
+      "capacity": 40,
+      "actual": 9.0,
+      "predicted": 32.7,
+      "baseline_prediction": 31.8,
+      "disruption_known_to_generator": true,
+      "drivers": [
+        {
+          "feature": "lag_mean4",
+          "meaning": "average same-slot demand (last 4 same weekdays)",
+          "value": 30.75,
+          "typical_value": 25.75,
+          "impact_passengers": 3.68
+        },
+        {
+          "feature": "route_occ_28d",
+          "meaning": "route's average occupancy, last 28 days",
+          "value": 0.736,
+          "typical_value": 0.589,
+          "impact_passengers": 2.39
+        },
+        {
+          "feature": "hour_decimal",
+          "meaning": "departure time of day",
+          "value": 7.5,
+          "typical_value": 12.5,
+          "impact_passengers": 2.36
+        },
+        {
+          "feature": "lag_occ_mean4",
+          "meaning": "average same-slot occupancy (last 4 same weekdays)",
+          "value": 0.769,
+          "typical_value": 0.576,
+          "impact_passengers": -2.33
+        },
+        {
+          "feature": "route_id",
+          "meaning": "route",
+          "value": "R02",
+          "typical_value": "R11",
+          "impact_passengers": 2.05
+        },
+        {
+          "feature": "distance_km",
+          "meaning": "route distance",
+          "value": 100.0,
+          "typical_value": 220.0,
+          "impact_passengers": 1.59
+        }
+      ]
+    }
+  ],
+  "leakage_audit": {
+    "forbidden_inputs": {
+      "passed": true,
+      "violations": [],
+      "n_features": 24
+    },
+    "chronological_split": {
+      "passed": true,
+      "train": [
+        "2022-01-01",
+        "2025-06-30"
+      ],
+      "validation": [
+        "2025-07-01",
+        "2025-09-30"
+      ],
+      "test": [
+        "2025-10-01",
+        "2025-12-31"
+      ],
+      "rows": {
+        "train": 87147,
+        "validation": 6276,
+        "test": 6269
+      }
+    },
+    "future_invariance": {
+      "passed": true,
+      "samples_checked": 25,
+      "failures": 0
+    },
+    "sensitive_data": {
+      "passed": true,
+      "sensitive_like_columns": [],
+      "columns": [
+        "trip_id",
+        "route_id",
+        "origin",
+        "destination",
+        "distance_km",
+        "departure_datetime",
+        "date",
+        "slot",
+        "capacity_seats",
+        "passengers",
+        "occupancy",
+        "valid_target",
+        "outlier_flag",
+        "sold_out"
+      ]
+    },
+    "all_passed": true
+  },
+  "runtime_seconds": 99.0
+}

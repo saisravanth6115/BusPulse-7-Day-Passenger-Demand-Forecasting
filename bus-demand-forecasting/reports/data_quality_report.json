@@ -1,0 +1,26 @@
+{
+  "rows_raw": 101212,
+  "bad_datetime_rows_dropped": 0,
+  "missing_before": {
+    "distance_km": 303,
+    "capacity_seats": 605,
+    "passengers": 808
+  },
+  "duplicates_dropped": 403,
+  "distance_filled": 302,
+  "capacity_filled": 604,
+  "impossible_passengers_set_nan": 313,
+  "rows_without_valid_target": 1117,
+  "outliers_flagged_not_removed": 700,
+  "sold_out_share": 0.07,
+  "rows_clean": 100809,
+  "date_range": [
+    "2022-01-01",
+    "2025-12-31"
+  ],
+  "missing_after": {
+    "distance_km": 0,
+    "capacity_seats": 0,
+    "passengers": 1117
+  }
+}

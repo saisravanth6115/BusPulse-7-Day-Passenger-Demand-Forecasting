@@ -1,0 +1,53 @@
+{
+  "forbidden_inputs": {
+    "passed": true,
+    "violations": [],
+    "n_features": 24
+  },
+  "chronological_split": {
+    "passed": true,
+    "train": [
+      "2022-01-01",
+      "2025-06-30"
+    ],
+    "validation": [
+      "2025-07-01",
+      "2025-09-30"
+    ],
+    "test": [
+      "2025-10-01",
+      "2025-12-31"
+    ],
+    "rows": {
+      "train": 87147,
+      "validation": 6276,
+      "test": 6269
+    }
+  },
+  "future_invariance": {
+    "passed": true,
+    "samples_checked": 25,
+    "failures": 0
+  },
+  "sensitive_data": {
+    "passed": true,
+    "sensitive_like_columns": [],
+    "columns": [
+      "trip_id",
+      "route_id",
+      "origin",
+      "destination",
+      "distance_km",
+      "departure_datetime",
+      "date",
+      "slot",
+      "capacity_seats",
+      "passengers",
+      "occupancy",
+      "valid_target",
+      "outlier_flag",
+      "sold_out"
+    ]
+  },
+  "all_passed": true
+}

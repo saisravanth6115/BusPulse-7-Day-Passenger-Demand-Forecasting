@@ -1,0 +1,19 @@
+# Exact versions this project was developed and tested with (Python 3.12). Use if you want identical behaviour:
+#   pip install -r requirements-lock.txt
+fastapi==0.162.7
+httpx==0.28.1
+ipykernel==7.4.0
+joblib==1.6.0
+matplotlib==3.11.2
+nbconvert==7.17.2
+nbformat==5.11.1
+numpy==2.5.4
+pandas==3.0.6
+pydantic==2.14.3
+pytest==9.2.0
+PyYAML==6.0.3
+scikit-learn==1.9.1
+scipy==1.18.1
+seaborn==0.13.2
+streamlit==1.67.0
+uvicorn==0.54.0

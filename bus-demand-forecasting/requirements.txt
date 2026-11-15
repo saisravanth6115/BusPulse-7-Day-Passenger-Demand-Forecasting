@@ -1,0 +1,19 @@
+# Core ML / data
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.3
+scipy>=1.10
+joblib>=1.3
+matplotlib>=3.7
+# Inference API + interactive app
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.0
+streamlit>=1.30
+# Tests
+pytest>=7.4
+httpx>=0.25
+# Notebooks (only needed to re-build them)
+nbformat>=5.9
+nbconvert>=7.0
+ipykernel>=6.25
